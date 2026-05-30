@@ -27,10 +27,11 @@ const client = new Client({
 const LAGER_CHANNEL_ID = "1510216238289387540";
 const LOG_CHANNEL_ID = "1459706196549308549";
 
-// 👑 VIEW ROLES
+// 👑 VIEW ROLES (Bestand sehen)
 const VIEW_ROLES = [
   "1475859240676757646",
-  "1475859186414911529"
+  "1475859186414911529",
+  "1475858797024247838"
 ];
 
 
@@ -50,15 +51,15 @@ function hasRole(member, roles) {
 }
 
 
-// 🔥 FIVE M LOG STYLE LOG (EMBED)
+// 🔥 LOG SYSTEM
 async function sendLog(member, action, item, amount) {
   try {
     const channel = await client.channels.fetch(LOG_CHANNEL_ID);
     if (!channel) return;
 
     const embed = new EmbedBuilder()
-      .setTitle("🏴 El Averno Lager Log")
-      .setColor(0x111111)
+      .setTitle("🔥 El Averno Lager Log")
+      .setColor(0xff3300)
       .setThumbnail(member.displayAvatarURL({ dynamic: true }))
       .addFields(
         { name: "👤 Spieler", value: member.displayName, inline: true },
@@ -85,10 +86,10 @@ function lagerEmbed() {
   if (!text) text = "📭 Lager ist leer";
 
   return new EmbedBuilder()
-    .setTitle("🏴 El Averno LagerSystem")
-    .setColor(0x111111)
+    .setTitle("🔥 El Averno LagerSystem")
+    .setColor(0xff3300)
     .setDescription(text)
-    .setFooter({ text: "El Averno • RP System" });
+    .setFooter({ text: "El Averno RP System" });
 }
 
 
@@ -154,8 +155,8 @@ client.on("messageCreate", (message) => {
   if (message.channel.id !== LAGER_CHANNEL_ID) return;
 
   const panel = new EmbedBuilder()
-    .setTitle("🏴 El Averno LagerSystem")
-    .setColor(0x111111)
+    .setTitle("🔥 El Averno LagerSystem")
+    .setColor(0xff3300)
     .setDescription("📦 Nutze die Buttons um das Lager zu verwalten");
 
   message.channel.send({
@@ -183,13 +184,13 @@ client.on("interactionCreate", async (interaction) => {
       if (!hasRole(interaction.member, VIEW_ROLES)) {
         return interaction.reply({
           content: "❌ Kein Zugriff",
-          ephemeral: true
+          flags: 64
         });
       }
 
       return interaction.reply({
         embeds: [lagerEmbed()],
-        ephemeral: true
+        flags: 64
       });
     }
   }
@@ -202,7 +203,7 @@ client.on("interactionCreate", async (interaction) => {
     if (!item || isNaN(amount)) {
       return interaction.reply({
         content: "❌ Ungültige Eingabe",
-        ephemeral: true
+        flags: 64
       });
     }
 
@@ -217,7 +218,7 @@ client.on("interactionCreate", async (interaction) => {
 
       return interaction.reply({
         content: `➕ ${amount} ${item} eingelagert`,
-        ephemeral: true
+        flags: 64
       });
     }
 
@@ -230,12 +231,12 @@ client.on("interactionCreate", async (interaction) => {
 
       return interaction.reply({
         content: `➖ ${amount} ${item} ausgelagert`,
-        ephemeral: true
+        flags: 64
       });
     }
   }
 });
 
 
-// 🔑 LOGIN
+// 🔑 LOGIN (RENDER SAFE)
 client.login(process.env.TOKEN);
